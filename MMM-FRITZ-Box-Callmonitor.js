@@ -41,9 +41,9 @@ Module.register("MMM-FRITZ-Box-Callmonitor", {
 	/*
 	 * ToDo: enable the following method after version MM 2.1.0 is released
 	 */
-	//getHeader: function() {
-	//	return this.data.header + this.getContactsSymbol();
-	//},
+	getHeader: function() {
+		return this.data.header + this.getContactsSymbol();
+	},
 
 	getScripts: function() {
 		return ["moment.js"];
@@ -84,11 +84,12 @@ Module.register("MMM-FRITZ-Box-Callmonitor", {
 
 	// Override socket notification handler.
 	socketNotificationReceived: function(notification, payload) {
+		// message: "<span style='font-size:" + this.config.numberFontSize.toString() + "px'>" + payload + "<span>", //HTML in messages does not work!
 		if (notification === "call") {
 			//Show alert on UI
 			this.sendNotification("SHOW_ALERT", {
 				title: this.translate("title"),
-				message: "<span style='font-size:" + this.config.numberFontSize.toString() + "px'>" + payload + "<span>",
+				message: payload,
 				imageFA: "phone"
 			});
 
