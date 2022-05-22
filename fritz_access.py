@@ -1,7 +1,7 @@
-import argparse, os, fritzconnection, urllib2, sys, json
+import argparse, os, fritzconnection, sys, json, urllib.request, urllib.error
 
 def send_file(file, content):
-    print json.dumps({"filename": file, "content": content})
+    print(json.dumps({"filename": file, "content": content}))
     sys.stdout.flush()
 
 class FritzAccess(object):
@@ -30,16 +30,16 @@ class FritzAccess(object):
 
     def forward_file(self, url, filename):
         try:
-            f = urllib2.urlopen(url)
+            f = urllib.request.urlopen(url)
             content = f.read()
             f.close()
             # replace newline with space keep clear where the file ends
-            content = content.replace("\n", " ")
+            content = content.decode().replace("\n", " ")
             send_file(filename, content)
-        except urllib2.HTTPError, e:
+        except urllib.error.HTTPError as e:
             raise Exception("Error (HTTP)" + str(e.code) + url)
             sys.exit(1)
-        except urllib2.URLError, e:
+        except urllib.error.URLError as e:
             raise Exception("Error (URL)" + str(e.code) + url)
             sys.exit(1)
 
